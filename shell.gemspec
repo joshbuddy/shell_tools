@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 require "shell_utils/version"
 
 Gem::Specification.new do |s|
-  s.name        = "shell_utils"
+  s.name        = "shell"
   s.version     = ShellUtils::VERSION
   s.authors     = ["Josh Hull"]
   s.email       = ["joshbuddy@gmail.com"]
