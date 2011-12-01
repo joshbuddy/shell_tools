@@ -38,4 +38,21 @@ module ShellUtils
       result
     end
   end
+
+  def capture
+    old_out, old_err = STDOUT.dup, STDERR.dup
+    stdout_read, stdout_write = IO.pipe
+    stderr_read, stderr_write = IO.pipe
+    $stdout.reopen(stdout_write)
+    $stderr.reopen(stderr_write)
+    yield
+    stdout_write.close
+    stderr_write.close
+    out = stdout_read.rewind && stdout_read.read rescue nil
+    err = stderr_read.rewind && stderr_read.read rescue nil
+    [out, err]
+  ensure
+    $stdout.reopen(old_out)
+    $stderr.reopen(old_err)
+  end
 end
