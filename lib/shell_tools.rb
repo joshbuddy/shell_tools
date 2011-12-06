@@ -1,6 +1,6 @@
-require "shell_utils/version"
+require "shell_tools/version"
 
-module ShellUtils
+module ShellTools
   extend self
   
   def sh(cmd, base = nil)

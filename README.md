@@ -1,4 +1,4 @@
-# ShellUtils
+# ShellTools
 
 Some common shell utilities.
 

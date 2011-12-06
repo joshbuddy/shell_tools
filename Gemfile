@@ -1,4 +1,4 @@
 source "http://rubygems.org"
 
-# Specify your gem's dependencies in shell_utils.gemspec
+# Specify your gem's dependencies in ShellTools.gemspec
 gemspec

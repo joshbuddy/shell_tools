@@ -1,17 +1,17 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "shell_utils/version"
+require "shell_tools/version"
 
 Gem::Specification.new do |s|
-  s.name        = "shell"
-  s.version     = ShellUtils::VERSION
+  s.name        = "shell_tools"
+  s.version     = ShellTools::VERSION
   s.authors     = ["Josh Hull"]
   s.email       = ["joshbuddy@gmail.com"]
   s.homepage    = ""
   s.summary     = %q{Some common shell utils}
   s.description = %q{Some common shell utils.}
 
-  s.rubyforge_project = "shell_utils"
+  s.rubyforge_project = "shell_tools"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
