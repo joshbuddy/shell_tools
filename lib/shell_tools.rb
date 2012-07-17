@@ -22,21 +22,20 @@ module ShellTools
   end
 
   def escape_word(str)
-    if str.empty?
-      "''"
-    elsif %r{\A[0-9A-Za-z+,./:=@_-]+\z} =~ str
-      str
-    else
-      result = ''
-      str.scan(/('+)|[^']+/) {
-        if $1
-          result << %q{\'} * $1.length
-        else
-          result << "'#{$&}'"
-        end
-      }
-      result
-    end
+    # An empty argument will be skipped, so return empty quotes.
+    return "''" if str.empty?
+
+    str = str.dup
+
+    # Process as a single byte sequence because not all shell
+    # implementations are multibyte aware.
+    str.gsub!(/([^A-Za-z0-9_\-.,:\/@\n])/n, "\\\\\\1")
+
+    # A LF cannot be escaped with a backslash because a backslash + LF
+    # combo is regarded as line continuation and simply ignored.
+    str.gsub!(/\n/, "'\n'")
+
+    return str
   end
 
   def capture
@@ -51,6 +50,24 @@ module ShellTools
     out = stdout_read.rewind && stdout_read.read rescue nil
     err = stderr_read.rewind && stderr_read.read rescue nil
     [out, err]
+  ensure
+    $stdout.reopen(old_out)
+    $stderr.reopen(old_err)
+  end
+
+  def capture_stdout
+    out, _ = capture { yield }
+    out
+  end
+
+  def capture_all
+    old_out, old_err = STDOUT.dup, STDERR.dup
+    stdall_read, stdall_write = IO.pipe
+    $stdout.reopen(stdall_write)
+    $stderr.reopen(stdall_write)
+    yield
+    stdall_write.close
+    stdall_write.rewind && stdall_write.read rescue ""
   ensure
     $stdout.reopen(old_out)
     $stderr.reopen(old_err)
